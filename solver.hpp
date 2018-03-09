@@ -10,7 +10,7 @@
 class solver
 {
     public:
-        solver(const std::string& mode, netlist&);
+        solver(const std::string& mode, const std::vector<unsigned int>& nodes, netlist&);
         void mna();
         void solve();
         void print();
@@ -18,6 +18,7 @@ class solver
 
     private:
         std::string mode;
+        std::vector<unsigned int> nodes;
         netlist& nlist;
         GiNaC::matrix A;
         GiNaC::matrix x;

@@ -5,8 +5,8 @@
 
 #include "mna.hpp"
 
-solver::solver(const std::string& mode, netlist& nlist) :
-    mode(mode), nlist(nlist)
+solver::solver(const std::string& mode, const std::vector<unsigned int>& nodes, netlist& nlist) :
+    mode(mode),nodes(nodes), nlist(nlist)
 {
 
 }
@@ -72,11 +72,34 @@ void solver::print()
             }
         }
     }
-    if(mode == "tf")
+    else if(mode == "tf")
     {
-        unsigned int node1 = 1;
-        unsigned int node2 = 2;
-        std::cout << "H(s) = " << results(node2 - 1, 0) / results(node1 - 1, 0) << '\n';
+        if(nodes.size() != 2){
+            std::cerr << "You have to specify two nodes (by using the -n argument two times)"<< '\n';
+            exit(1);
+        }
+        
+        unsigned int nodes_count = nlist.number_of_nodes() + 1;
+        if(nodes[0] == 0 || nodes[1]== 0)
+        {
+            std::cerr << " You can't use the GND node (node 0)" << '\n';
+            exit(1);
+        }
+        
+        
+        if (nodes[0] < nodes_count && nodes[1] < nodes_count)
+        {
+            std::cout << "H(s) = " << results(nodes[1] - 1, 0) / results(nodes[0] - 1, 0) << '\n';
+        }
+        else
+        {
+            std::cerr << "Unknown Nodes. There are only " << nodes_count << " nodes!\n";
+        }
+    }
+    else
+    {
+        std::cerr << "unknown mode '" << mode << "' given\n";
+        exit(1);
     }
 }
 

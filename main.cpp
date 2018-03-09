@@ -26,7 +26,9 @@ int main(int argc, char** argv)
         if(nlist)
         {
             const std::string mode = commandline_options["mode"].as<std::string>();
-            solver S(mode, nlist);
+            const std::vector<unsigned int> nodes = commandline_options["node"].as<std::vector<unsigned int>>();
+
+            solver S(mode, nodes, nlist);
             S.mna();
             if(commandline_options.count("print"))
             {
