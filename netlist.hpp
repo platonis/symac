@@ -112,7 +112,7 @@ class netlist
         bool simplification ;
         std::vector<std::string> simplify_lines; 
         std::map<std::string, unsigned int> simpl_map;
-        std::map<std::string, std::string> simpl_commands;
+        std::vector<std::pair<std::string, std::string>> simpl_commands;
         //simplification level (english, medium, well-done)
         std::string simpl_level;
 };

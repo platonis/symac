@@ -292,10 +292,10 @@ void netlist::read(std::string filename)
     // set number of nodes, number of sources etc.
     update();
     set_simplification();
-    for(auto& it: simpl_commands)
+    for(auto& p: simpl_commands)
     {
-        std::string first  = it.first;
-        std::string second = it.second;
+        std::string first  = p.first;
+        std::string second = p.second;
         change_simpl_map(first,second);
     }
     for(const auto& c : components)
@@ -603,7 +603,7 @@ void netlist::set_simplification()
         stream >> first;// s = R1
         stream >> second;// s = >>
         stream >> second;// s = R2
-        simpl_commands.insert(std::make_pair(first,second)); 
+        simpl_commands.push_back(std::make_pair(first,second)); 
     }
 }
 std::map<std::string, unsigned int > netlist::get_simplifications()
@@ -626,7 +626,7 @@ void netlist::set_simpl_level(const std::string& line)
 {
     std::stringstream stream(line);
     std::string s;
-    stream >> s ;// command "Simplify-Level"
+    stream >> s ;// command "Level"
     stream >> simpl_level;
 }
 std::string netlist::get_simpl_level()
