@@ -39,12 +39,9 @@ static bool is_component(const std::string& line)
 static bool is_subckt_title(const std::string& line)
 {
     std::istringstream stream(line);
-    char dot;
     std::string v;
-
-    stream >> dot;
     stream >> v;
-    if(v == "subckt")
+    if(v == "title")
     { 
         return true;
     }
@@ -237,25 +234,34 @@ void netlist::read(std::string filename)
         }
         else if(is_command(line))
         {
-            if (line.find("simplify"))
+            if (line.find("subckt"))
+            {
+                number_subckt++;
+                subckt = true;
+            }
+            else if (line.find("simplify"))
             {
                 simplification = true;
                 simplify_temp = true;
             }
+            else
+            {
+                std::cerr << " Command not found "<< '\n';
+            }
             continue;
         }
-        if(subckt)
+        else if(subckt)
         {
-            read_subckt_line(line, number_subckt);
-        }
-        else if(is_subckt_title(line))
-        {
-            number_subckt++;
-            subckt = true;
-            std::string init (".subckt");
-            std::string title = line;
-            title.erase(0,init.length());
-            read_subckt_title(title);
+            if(is_subckt_title(line))
+            {
+                std::string title = line;
+                read_subckt_title(title);
+            }
+            else
+            {
+                read_subckt_line(line, number_subckt);
+            }
+            continue;
         }
         else if(is_subckt_call(line))
         {
@@ -493,6 +499,8 @@ void netlist::read_subckt_title(std::string& title)
     std::vector<std::string> sub_terminal_names;
     std::string subcktname;
     std::string tname;
+    std::string init;
+    stream >> init;
     stream >> subcktname;
     while(stream >> tname)
     {

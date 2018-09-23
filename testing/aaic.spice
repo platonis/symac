@@ -1,0 +1,19 @@
+* Advanced Analog Integrated Circuits
+* Zwei-Stufenverstärker
+.command simplify
+level english
+Rb >> Rc
+Ra >> Rb
+Cb >> Cc
+Ca >> Cb
+.end
+
+I in GND GM1
+R in GND Ra 
+C in GND Ca
+C in 2 Cc
+R 2 out Rc
+C in out Cp
+I out GND GM2
+R out GND Rb
+C out GND Cb
