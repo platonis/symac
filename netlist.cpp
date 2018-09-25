@@ -234,21 +234,20 @@ void netlist::read(std::string filename)
         }
         else if(is_command(line))
         {
-            if (line.find("subckt"))
-            {
-                number_subckt++;
-                subckt = true;
-            }
-            else if (line.find("simplify"))
+            if(line.find("simplify")!= std::string::npos)
             {
                 simplification = true;
                 simplify_temp = true;
+            }
+            else if(line.find("subckt")!= std::string::npos)
+            {
+                number_subckt++;
+                subckt = true;
             }
             else
             {
                 std::cerr << " Command not found "<< '\n';
             }
-            continue;
         }
         else if(subckt)
         {
